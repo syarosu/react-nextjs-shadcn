@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# React Next.js Shadcn 프로젝트
 
-## Getting Started
+이 프로젝트는 React와 Next.js를 기반으로 하여 최신 프론트엔드 기술과 UI 컴포넌트를 활용한 웹 애플리케이션 템플릿입니다. Shadcn UI를 활용하여 깔끔하고 현대적인 사용자 인터페이스를 제공합니다.
 
-First, run the development server:
+## 기술 스택
+
+* **React**
+* **Next.js**
+* **TypeScript**
+* **Tailwind CSS**
+* **Shadcn UI**
+
+## 프로젝트 구조
+
+```bash
+.
+├── app
+│   ├── page.tsx (기본 페이지 정의)
+├── components ( UI 컴포넌트)
+├── lib ( 유틸리티 및 라이브러리 코드)
+├── public (정적 파일 관리)
+└── styles (전역 스타일 및 Tailwind 구성)
+```
+
+## 설치 및 실행 방법
+
+1. 저장소를 클론합니다.
+
+```bash
+git clone https://github.com/syarosu/react-nextjs-shadcn.git
+```
+
+2. 프로젝트 디렉터리로 이동 후, 의존성을 설치합니다.
+
+```bash
+cd react-nextjs-shadcn
+npm install
+# 또는 yarn install
+```
+
+3. 로컬 서버를 실행합니다.
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# 또는 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. 브라우저에서 [http://localhost:3000](http://localhost:3000)으로 접속하여 확인합니다.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+이 프로젝트에 기여하고 싶다면, Fork 후 Pull Request를 보내주세요. 이슈나 기능 개선 사항은 Issue 탭을 통해 자유롭게 제안해 주시면 감사하겠습니다.
 
-## Learn More
+## 라이선스
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+이 프로젝트는 [MIT 라이선스](LICENSE)를 따릅니다.
