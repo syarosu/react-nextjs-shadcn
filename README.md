@@ -1,6 +1,10 @@
 # React Next.js Shadcn 프로젝트
 
-이 프로젝트는 API 호출 모듈을 사용해서 React와 Next.js를 기반으로 Shadcn UI를 사용한 게시판 입니다.
+이 프로젝트는 https://jsonplaceholder.typicode.com 에서 제공한 API를 사용해서 API 호출 모듈화 하여 React와 Next.js를 기반으로 Shadcn UI를 사용한 게시판 입니다.
+API 경로는 'env.local' 파일에서 환경변수로 수정 가능합니다
+
+![image](https://github.com/user-attachments/assets/2bafe202-1f8e-4d8d-aa28-f5e4d89ab53c)
+
 
 ## 기술 스택
 
