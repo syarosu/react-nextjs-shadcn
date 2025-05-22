@@ -1,5 +1,5 @@
 import { http } from '@/service/Service';
-import { Post, Comment } from '@/model/post';
+import type { Post, PostDetail, Comment } from '@/model/post';
 
 const getPosts = (): Promise<Post[]> => {
     return http.get<Post[]>('/api/posts');
@@ -26,8 +26,8 @@ const updatePost = (post: Post): Promise<Post> => {
     return http.put<Post>(`/api/posts/${post.id}`, post);
 };
 
-const deletePost = (post: Post): Promise<Post> => {
-    return http.put<Post>(`/api/posts/delete`, post);
+const deletePost = (postId: string): Promise<Post> => {
+    return http.delete<Post>(`/api/posts/${postId}`);
 };
 
 const createComment = (comment: Comment): Promise<Comment> => {

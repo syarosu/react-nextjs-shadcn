@@ -268,8 +268,6 @@ const Tables = () => {
                         <div className="h-[700px] px-8 pb-8 flex-col justify-start items-start gap-2.5 flex">
 
                             <div className="self-stretch justify-between items-center inline-flex">
-                                {/* <Button type="button" onClick={() => signIn('google')} >Login</Button> */}
-
                                 <DataTableSearch table={table} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
                             </div>
                             <div className="self-stretch justify-between items-center inline-flex">

@@ -9,30 +9,20 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-import { Post } from "@/model/post";
-import PostUpdate from "./PostUpdate";
+import type { Post, PostDetail } from "@/model/post";
+import PostUpdate from "./post-update";
 import { usePostDetail } from "@/service/post/usePostService";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
 import { useDeletePost } from "@/service/post/usePostService";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/service/post/queries";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 
 type PostDetailProps = {
     isOpen: boolean,
-    postDetail: Post | null,
+    postDetail: Post | undefined,
     setIsOpen: (value: boolean) => void,
     children?: React.ReactNode
 }
-
-const formSchema = z.object({
-    password: z.string().min(4).max(10),
-})
 
 const PostDetail = ({ isOpen, postDetail, setIsOpen, children }: PostDetailProps) => {
     const queryClient = useQueryClient();
@@ -46,13 +36,6 @@ const PostDetail = ({ isOpen, postDetail, setIsOpen, children }: PostDetailProps
     const containerWidth = typeof window !== "undefined" ? window.innerWidth : 1;
     const rightRatio = ((containerWidth - maxWidth) / containerWidth) * 100;
 
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            password: "",
-        },
-    })
-
     const getTitle = () => {
         if (updatePostDetail) {
             return updatePostDetail.title;
@@ -64,10 +47,10 @@ const PostDetail = ({ isOpen, postDetail, setIsOpen, children }: PostDetailProps
 
     const getContent = () => {
         if (updatePostDetail) {
-            return updatePostDetail.content;
+            return updatePostDetail.body;
         }
 
-        return postDetail?.content;
+        return postDetail?.body;
     }
 
     const handleMouseMove = (event: MouseEvent) => {
@@ -90,16 +73,11 @@ const PostDetail = ({ isOpen, postDetail, setIsOpen, children }: PostDetailProps
         document.addEventListener('mouseup', handleMouseUp);
     };
 
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        const body = {
-            id: postDetail?.id,
-            password: values.password
-        }
+    const hanmdleDelete = async () => {
 
-        deletePost(body, {
+        deletePost(String(postDetail?.id), {
             onSuccess: ({ status, message }: any) => {
                 if (status >= 400) {
-                    form.setError("password", { type: 'custom', message: message });
                     return;
                 }
                 queryClient.invalidateQueries({ queryKey: queryKeys.all });
@@ -133,29 +111,11 @@ const PostDetail = ({ isOpen, postDetail, setIsOpen, children }: PostDetailProps
                                     <Button variant="destructive">DELETE</Button>
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
-                                    <AlertDialogTitle></AlertDialogTitle>
-                                    <Form {...form} >
-                                        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                                            <FormField
-                                                control={form.control}
-                                                name="password"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel>Password</FormLabel>
-                                                        <FormControl>
-                                                            <Input type="password" placeholder="password" {...field} />
-                                                        </FormControl>
-                                                        <FormMessage />
-                                                    </FormItem>
-
-                                                )}
-                                            />
-                                            <div className="text-right">
-                                                <Button type="submit">Submit</Button>
-                                                <AlertDialogCancel type="button">Cancel</AlertDialogCancel>
-                                            </div>
-                                        </form>
-                                    </Form>
+                                    <AlertDialogTitle>Are you sure you want to delete it?</AlertDialogTitle>
+                                    <div className="text-right">
+                                        <Button type="button" variant="destructive" onClick={hanmdleDelete} >DELETE</Button>
+                                        <AlertDialogCancel type="button">Cancel</AlertDialogCancel>
+                                    </div>
                                 </AlertDialogContent>
                             </AlertDialog>
                         </div>

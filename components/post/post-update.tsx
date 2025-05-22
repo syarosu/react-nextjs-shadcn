@@ -1,4 +1,4 @@
-import { Post } from "@/model/post";
+import type { Post, PostDetail } from "@/model/post";
 import { Input } from "../ui/input";
 import { SheetHeader, SheetTitle } from "../ui/sheet";
 import { z } from "zod";
@@ -12,13 +12,12 @@ import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/service/post/queries";
 
 const formSchema = z.object({
-    title: z.string().min(2).max(50),
+    title: z.string().min(2).max(100),
     content: z.string().min(2).max(500),
-    password: z.string().min(4).max(10),
 })
 
 type PostUpdateProps = {
-    postDetail: Post | null
+    postDetail: Post | undefined,
     setIsOpenUpdate: (value: boolean) => void
     setIsUpdated: (value: boolean) => void
 }
@@ -31,25 +30,21 @@ const PostUpdate = ({ postDetail, setIsOpenUpdate, setIsUpdated }: PostUpdatePro
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: `${postDetail?.title}`,
-            content: `${postDetail?.content}`,
-            password: "",
+            content: `${postDetail?.body}`,
         },
     })
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
-        const password = values.password;
-
         const body = {
-            "id": postDetail?.id,
+            "id": postDetail?.id ?? 0,
             "title": values.title,
-            "content": values.content,
-            "password": password
+            "body": values.content,
+            "userId": postDetail?.userId ?? 0,
         }
         updatePost(body, {
             onSuccess: ({ status, message }: any) => {
                 if (status >= 400) {
-                    form.setError("password", { type: 'custom', message: message });
                     return;
                 }
                 queryClient.invalidateQueries({ queryKey: queryKeys.all });
@@ -97,20 +92,6 @@ const PostUpdate = ({ postDetail, setIsOpenUpdate, setIsUpdated }: PostUpdatePro
 
                                 )}
                             />
-                            <FormField
-                                control={form.control}
-                                name="password"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Password</FormLabel>
-                                        <FormControl>
-                                            <Input type="password" placeholder="password" {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-
-                                )}
-                            />
                             <Button type="submit">Submit</Button>
                             <Button type="button" onClick={() => setIsOpenUpdate(false)}>Cancel</Button>
                         </form>
@@ -118,11 +99,6 @@ const PostUpdate = ({ postDetail, setIsOpenUpdate, setIsUpdated }: PostUpdatePro
                 </SheetTitle>
             </SheetHeader>
 
-
-            {/* <br />
-            <div className="text-right">
-
-            </div> */}
         </div >
     )
 }

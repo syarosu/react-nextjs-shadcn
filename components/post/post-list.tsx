@@ -25,15 +25,14 @@ import {
     FilterFn,
     createColumnHelper
 } from "@tanstack/react-table";
-import PostDetail from "./PostDetail";
+import PostDetail from "./post-detail";
 import { ScrollArea } from "../ui/scroll-area";
-import PostComments from "./PostComments";
-import PostSkeleton from "./PostSkeleton";
+import PostComments from "./post-comments";
+import PostSkeleton from "./post-skeleton";
 
-import { convertToDate } from "@/utils/utils";
-import PostCommentCreate from "./PostCommentCreate";
+import PostCommentCreate from "./post-comment-create";
 import DataTableSearch from "../ui/data-table-search";
-import PostCreate from "./PostCreate";
+import PostCreate from "./post-create";
 
 const columnHelper = createColumnHelper<Post>();
 
@@ -55,9 +54,6 @@ const getTitleValue = (post: Post): string => {
         return post.title ?? "";
     }
 
-    if (post.commentCount ?? 0 > 0) {
-        return `${post.title} (${post.commentCount})`;
-    }
 
     return post.title ?? "";
 }
@@ -65,7 +61,7 @@ const getTitleValue = (post: Post): string => {
 const PostList = () => {
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [postDetail, setPostDetail] = useState<Post | null>();
+    const [postDetail, setPostDetail] = useState<Post>();
 
     const { data: posts } = usePosts({ staleTime: 0 });
     const { data: postComments, isFetching } = usePostComments(String(postDetail?.id), { enabled: !!postDetail?.id, staleTime: 0 });
@@ -80,15 +76,9 @@ const PostList = () => {
 
     let copiedPostComments = postComments ?? [];
 
-    if (postComments && postComments.length > 0) {
-        copiedPostComments = [...postComments].sort((a, b) => {
-            return new Date(String(b.createdAt)).getTime() - new Date(String(a.createdAt)).getTime();
-        });
-    }
-
     // solution: https://github.com/TanStack/table/issues/4241
     const columns: ColumnDef<Post, any>[] = [
-        columnHelper.accessor<"index", number>("index", {
+        columnHelper.accessor<"id", number>("id", {
             header: ({ column }) => (
                 <Button
                     variant="ghost"
@@ -98,7 +88,7 @@ const PostList = () => {
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             ),
-            cell: ({ row }) => <div>{row.getValue("index")}</div>,
+            cell: ({ row }) => <div>{row.getValue("id")}</div>,
             filterFn: "arrIncludesSome"
         }),
         columnHelper.accessor<"title", string>("title", {
@@ -113,32 +103,6 @@ const PostList = () => {
 
             ),
             cell: ({ row }) => <div>{row.getValue("title")}</div>,
-            filterFn: "arrIncludesSome"
-        }),
-        columnHelper.accessor<"createdAt", string>("createdAt", {
-            header: ({ column }) => (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Create Time
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            ),
-            cell: ({ row }) => <div>{convertToDate(row.getValue("createdAt"))}</div>,
-            filterFn: "arrIncludesSome"
-        }),
-        columnHelper.accessor<"updatedAt", string>("updatedAt", {
-            header: ({ column }) => (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Update Time
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            ),
-            cell: ({ row }) => <div>{convertToDate(row.getValue("updatedAt"))}</div>,
             filterFn: "arrIncludesSome"
         })
     ];
@@ -192,9 +156,7 @@ const PostList = () => {
                 title: `${getTitleValue(post)}`,
                 index: index + 1
             }
-        }).sort((a, b) => {
-            return new Date(String(b.createdAt)).getTime() - new Date(String(a.createdAt)).getTime();
-        }) || []);
+        }));
     }, [posts])
 
     return (
@@ -209,7 +171,7 @@ const PostList = () => {
                 <DataTablePagination table={table} />
             </div>
             {
-                isOpen && <PostDetail isOpen={isOpen} postDetail={postDetail ?? null} setIsOpen={setIsOpen}>
+                isOpen && <PostDetail isOpen={isOpen} postDetail={postDetail} setIsOpen={setIsOpen}>
                     <PostCommentCreate postId={postDetail?.id ?? 0} />
                     <ScrollArea className="h-[700px]">
                         <div className="p-4">

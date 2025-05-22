@@ -1,6 +1,5 @@
-import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import { Comment } from "@/model/post";
-import { convertToDate } from "@/utils/utils"
 
 type PostCommentsProps = {
     postComment: Comment
@@ -11,9 +10,12 @@ const PostComments = ({ postComment }: PostCommentsProps) => {
         <>
             <Card className="w-[500px]">
                 <CardHeader className="flex p-3">
-                    <CardTitle className="text-lg">{postComment?.content}</CardTitle>
-                    <CardDescription className="text-right">{convertToDate(String(postComment?.createdAt))}</CardDescription>
+                    <CardTitle className="text-lg">{postComment?.name}</CardTitle>
+                    <CardDescription className="text-right">{postComment?.email}</CardDescription>
                 </CardHeader>
+                <CardContent>
+                    <div>{postComment.body}</div>
+                </CardContent>
             </Card >
             <br />
         </>

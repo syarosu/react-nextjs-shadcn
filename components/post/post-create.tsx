@@ -23,9 +23,12 @@ import { useCreatePost } from "@/service/post/usePostService"
 
 const formSchema = z.object({
     title: z.string().min(2).max(50),
-    content: z.string().min(2).max(500),
-    password: z.string().min(4).max(10),
+    body: z.string().min(2).max(500),
 })
+
+const getRandomNumberBetweenOneAndTen = (): number => {
+    return Math.floor(Math.random() * 10) + 1;
+}
 
 const PostCreate = () => {
     const queryClient = useQueryClient();
@@ -37,26 +40,26 @@ const PostCreate = () => {
 
     const containerWidth = typeof window !== "undefined" ? window.innerWidth : 1;
     const rightRatio = ((containerWidth - maxWidth) / containerWidth) * 100;
-    const { mutate: registPost } = useCreatePost();
+    const { mutate: registPost, isPending } = useCreatePost();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
-            content: "",
-            password: "",
+            body: "",
         },
     })
 
     // 2. Define a submit handler.
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
+        if(isPending) {
+            return;
+        }
 
         const body = {
-            "title": values.title,
-            "content": values.content,
-            "password": values.password
+            title: values.title,
+            body: values.body,
+            userId: getRandomNumberBetweenOneAndTen()
         }
 
         registPost(body, {
@@ -89,7 +92,7 @@ const PostCreate = () => {
         document.addEventListener('mousemove', handleMouseMove);
         document.addEventListener('mouseup', handleMouseUp);
     };
-    
+
     return (
         <>
             <Button type="button" onClick={() => setIsOpen(true)}>Create</Button>
@@ -126,10 +129,10 @@ const PostCreate = () => {
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="content"
+                                    name="body"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>Content</FormLabel>
+                                            <FormLabel>Body</FormLabel>
                                             <FormControl>
                                                 <Textarea {...field} />
                                             </FormControl>
@@ -139,20 +142,6 @@ const PostCreate = () => {
                                     )}
                                 />
 
-                                <FormField
-                                    control={form.control}
-                                    name="password"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Password</FormLabel>
-                                            <FormControl>
-                                                <Input type="password" placeholder="password" {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-
-                                    )}
-                                />
                                 <Button
                                     variant="outline"
                                     onClick={() => {

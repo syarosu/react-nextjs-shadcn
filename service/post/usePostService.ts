@@ -24,7 +24,7 @@ export function useUpdatePost() {
 }
 
 export function useDeletePost() {
-    return useMutation({ mutationFn: (post: Post) => PostService.deletePost(post) });
+    return useMutation({ mutationFn: (postId: string) => PostService.deletePost(postId) });
 }
 
 export function useCreatePostComment() {

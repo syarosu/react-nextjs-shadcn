@@ -8,7 +8,7 @@ interface HTTPInstance {
     patch<T>(url: string, data?: unknown, config?: RequestInit): Promise<T>;
 }
 
-const baseURL = `${process.env.NEXT_PUBLIC_BASE_URL}`;
+const baseURL = `${process.env.NEXT_PUBLIC_LOCAL_URL ?? ""}`;
 const headers: Record<string, string> = {
     csrf: 'token',
     Referer: baseURL,

@@ -1,19 +1,23 @@
-export interface Post extends PostCommon {
+export interface Post {
+    title: string,
+    body: string,
+    userId: number
     id?: number,
-    title?: string,
-    commentCount?: number,
+}
+
+export interface PostDetail {
+    title: string,
+    body: string,
+    id: number,
 }
 
 export interface Comment extends PostCommon {
-    id?: number,
-    postId: number,
+    name?: string,
+    body: Post['body'],
+    email?: string
 }
 
 interface PostCommon {
-    index?: number | undefined,
-    content?: string,
-    delYn?: string,
-    password?: string,
-    createdAt?: string,
-    updatedAt?: string
+    id?: number,
+    postId: number,
 }
