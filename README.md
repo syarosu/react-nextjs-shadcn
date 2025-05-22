@@ -1,6 +1,6 @@
 # React Next.js Shadcn 프로젝트
 
-이 프로젝트는 React와 Next.js를 기반으로 하여 최신 프론트엔드 기술과 UI 컴포넌트를 활용한 웹 애플리케이션 템플릿입니다. Shadcn UI를 활용하여 깔끔하고 현대적인 사용자 인터페이스를 제공합니다.
+이 프로젝트는 API 호출 모듈을 사용해서 React와 Next.js를 기반으로 Shadcn UI를 사용한 게시판 입니다.
 
 ## 기술 스택
 
